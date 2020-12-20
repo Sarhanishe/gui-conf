@@ -90,8 +90,9 @@ class CV:
 
 
 def load_image( infilename ) :
-    img = Image.open( infilename )
+    img = Image.open( infilename, mode="L")
     img.load()
+    img.convert("L")
     data = np.array( img, dtype=np.uint8 )
     return data
 
@@ -99,19 +100,19 @@ def save_image( npdata, outfilename ) :
     img = Image.fromarray( np.asarray( np.clip(npdata,0,255), dtype="uint8"), "L" )
     img.save( outfilename )
 
-def input_image(name):
-    input1=load_image(name)
-    n=len(input1)
-    health=np.zeros((n,n),dtype=np.int16)
-    try:
-        input1.shape[2]
-    except Exception:
-        return input1
-    else:
-        for i in range(n):
-            for j in range(n):
-                health[i][j]=(input1[i][j][0]/3+input1[i][j][1]/3+input1[i][j][2]/3)
-        return health
+# def input_image(name):
+#     input1=load_image(name)
+#     n=len(input1)
+#     health=np.zeros((n,n),dtype=np.int16)
+#     try:
+#         input1.shape[2]
+#     except Exception:
+#         return input1
+#     else:
+#         for i in range(n):
+#             for j in range(n):
+#                 health[i][j]=np.mean(input1[i][j][0],input1[i][j][1],input1[i][j][2])
+#         return health
 
 @numba.jit
 def solve(a,b):
