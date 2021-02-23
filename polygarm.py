@@ -130,32 +130,6 @@ def Range(d):
                 dr[i,j]=(d[i,j]-mn)*shift
     return dr
 
-def save_show(A,name):
-    n=len(A)
-    A_map=np.zeros((n,n,3), dtype=np.uint8)
-    A_Range=Range(A)
-    for i in range(n):
-        for j in range(n):
-            for c in range(3):
-                A_map[i][j][c]=A_Range[i][j]
-    fmt='png'
-    Pic = Image.fromarray(A_map, 'RGB')
-    Pic.save('{}.{}'.format(name, fmt), fmt='png')
-    Pic.show()
-    Pic.close()
-
-def save(A,name):
-    n=len(A)
-    A_map=np.zeros((n,n,3), dtype=np.uint8)
-    A_Range=Range(A)
-    for i in range(n):
-        for j in range(n):
-            for c in range(3):
-                A_map[i][j][c]=A_Range[i][j]
-    fmt='bmp'
-    Pic = Image.fromarray(A_map, 'RGB')
-    Pic.save('{}.{}'.format(name, fmt), fmt='bmp')
-    Pic.close()
 
 @numba.jit
 def Laplas_P(i,j,n,data,p=1):
@@ -277,9 +251,6 @@ def CoefMap(k,p):
 
 
 
-# In[21]:
-
-
 @numba.jit
 def Sign(x):
     if x<0:
@@ -288,19 +259,12 @@ def Sign(x):
         return 0
 
 
-# In[22]:
-
-
 def crossroad(i,j,pw):
     nc=i+j-pw+1
     res=0
     if nc:
         res=(nc*nc+nc)//2
     return res
-
-
-# In[23]:
-
 
 def mSize(n,pw):
     npar=pw*pw+(pw+1)*(pw+1)
@@ -315,9 +279,6 @@ def mSize(n,pw):
 
     return res
 
-
-
-# In[24]:
 
 
 #@numba.jit
@@ -374,8 +335,6 @@ def getCoef(pos,k,CMap,pix,n):
     dat[mid]+=summ-zeromark
     return dat,row,col
 
-
-# In[25]:
 
 
 def CoefMatr(n, k, p=1):
@@ -454,8 +413,6 @@ def CoefMatr(n, k, p=1):
     return a
 
 
-# In[26]:
-
 
 #@numba.jit
 def Rev_Lap(Img, k, a=1):
@@ -468,9 +425,6 @@ def Rev_Lap(Img, k, a=1):
     OriginImg = VecOriginImg.reshape(n,n)
 
     return OriginImg
-
-
-# In[27]:
 
 
 def Append(pos,k,CMap,pix,n):

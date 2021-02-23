@@ -43,13 +43,12 @@ class Compare(tk.Frame):
         img=self.prepare_image(img)
         self.img_before=ImageTk.PhotoImage(img)
         self.lab_bfr["image"]=self.img_before
-        res=pg.Range(-pg.Rev_Lap(np.array(img,dtype=np.uint8),dim,lam))
-        print("min, max",np.min(res),np.max(res))
+        res=pg.Range((1-2*(dim%2))*pg.Rev_Lap(np.array(img,dtype=np.uint8),dim,lam))
+        #print("min, max",np.min(res),np.max(res))
         self.img_res=Image.fromarray(np.uint8(res),"L")
         self.img_res.save("test.png")
         self.img_res=ImageTk.PhotoImage(self.img_res)
-        pg.save_show(res,"test2")
-
+        #pg.save_show(res,"test2")
 
 
         self.lab_aft["image"]=self.img_res
@@ -131,16 +130,6 @@ class Compare(tk.Frame):
             return img.resize((round(width),round(height)))
         else:
             return img
-
-
-
-
-
-
-
-
-
-
 
 
 root=tk.Tk()
