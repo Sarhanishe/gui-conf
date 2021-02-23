@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 import tkinter.filedialog as tkf
 from PIL import ImageTk,Image
 import polygarm as pg
+import numpy as np
 
 class Compare(tk.Frame):
     def push(self):
@@ -12,21 +13,21 @@ class Compare(tk.Frame):
         try :
             lam=float(lam)
         except TypeError:
-            tkm.showwarning(title="Внимание",message="Ожидается числовое значение")
+            tkm.showwarning(title="Внимание",message="Ожидается числовое значение параметра")
             return "Type"
 
         dim=self.dim_entry.get()
         if dim.isdigit():
             dim=int(dim)
         else:
-            tkm.showwarning(title="Внимание",message="Ожидается целочисленное значение")
+            tkm.showwarning(title="Внимание",message="Ожидается целочисленное значение степени")
             return "Type"
 
         ss=self.ss_entry.get()
         if ss.isdigit():
             ss=int(ss)
         else:
-            tkm.showwarning(title="Внимание",message="Ожидается целочисленное значение")
+            tkm.showwarning(title="Внимание",message="Ожидается целочисленное значение размера окна")
             return "Type"
 
         file_name = tkf.askopenfilename(
@@ -37,13 +38,21 @@ class Compare(tk.Frame):
             return
 
         img=Image.open(file_name)
-        img.convert("L")
+        img.load()
+        img=img.convert("L")
         img=self.prepare_image(img)
         self.img_before=ImageTk.PhotoImage(img)
         self.lab_bfr["image"]=self.img_before
-        img_res=pg.Rev_Lap(np.array(img,dtype=np.uint8),dim,lam)
-        
-        self.lab_aft["image"]=self.img_before
+        res=pg.Range(-pg.Rev_Lap(np.array(img,dtype=np.uint8),dim,lam))
+        print("min, max",np.min(res),np.max(res))
+        self.img_res=Image.fromarray(np.uint8(res),"L")
+        self.img_res.save("test.png")
+        self.img_res=ImageTk.PhotoImage(self.img_res)
+        pg.save_show(res,"test2")
+
+
+
+        self.lab_aft["image"]=self.img_res
 
 
 
@@ -75,7 +84,7 @@ class Compare(tk.Frame):
         self.but=tk.Button(self.settings_frame,text="OK",command=self.push)
         self.but.pack(side="left")
 
-        self.lam_entry.insert(0,"0.1")
+        self.lam_entry.insert(0,"1.01")
         self.ss_entry.insert(0,"0")
         self.dim_entry.insert(0,"1")
 

@@ -460,7 +460,7 @@ def CoefMatr(n, k, p=1):
 #@numba.jit
 def Rev_Lap(Img, k, a=1):
     n = len(Img)
-
+    print(Img.shape)
     VecImg = Img.reshape(n*n,)
 
     VecOriginImg = spsolve(CoefMatr(n, k, a), VecImg)
